@@ -24,7 +24,7 @@ joining so http/https and trailing-slash variants collapse to one key.
 import argparse
 import csv
 import sys
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit
 
 PYTHON_MIN = (3, 8)
 if sys.version_info < PYTHON_MIN:
@@ -32,17 +32,22 @@ if sys.version_info < PYTHON_MIN:
 
 
 def norm_url(u: str) -> str:
-    """Normalize a URL for joining (scheme-insensitive, no trailing slash)."""
+    """Normalize a URL for joining.
+
+    For a single-site landing-page blend, the path is the stable key. We strip
+    scheme and host so GA4's "/" and GSC's "https://example.com/" both collapse
+    to "/" (and "/blog/x" matches "https://example.com/blog/x"). Hosts are
+    assumed identical (a single property); cross-domain rows are rare here.
+    """
     u = (u or "").strip()
+    if not u:
+        return ""
     try:
         parts = urlsplit(u)
-        host = parts.netloc.lower()
-        path = parts.path.rstrip("/")
-        if not path:
-            path = ""
-        return urlunsplit(("", host, path, "", ""))
     except Exception:
-        return u.lower().rstrip("/")
+        return u.lower().rstrip("/") or "/"
+    path = parts.path or "/"
+    return path.rstrip("/") or "/"
 
 
 def load(path: str, key_col_hint):
