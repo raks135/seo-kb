@@ -1,0 +1,4 @@
+source,url,name,address,phone
+Google Business Profile,https://g.page/acme,Acme Plumbing LLC,"1 Main St, Springfield, IL 62701","+1-555-0100"
+Yelp,https://yelp.com/biz/acme,Acme Plumbing LLC,"1 Main St, Springfield, IL 62701","+1 555 0100"
+OldDirectory,https://old.example/acme,Acme Plumbing,"1 Main Street, Springfield,IL",5550100
