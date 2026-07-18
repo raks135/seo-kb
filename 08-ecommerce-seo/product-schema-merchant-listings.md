@@ -123,6 +123,8 @@ def validate_product(data: dict) -> list:
     offer = data.get("offers")
     if not isinstance(offer, dict):
         issues.append("Merchant listings require an 'offers' Offer object (not AggregateOffer)")
+    elif offer.get("@type") == "AggregateOffer":
+        issues.append("Merchant listings require a single 'Offer' object, not 'AggregateOffer'")
     else:
         ps = offer.get("priceSpecification") or {}
         price = offer.get("price")
